@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 760 445" role="img" aria-label="Horizontal bar chart of total scores out of 28: handoff-upkeep 26, softaworks 18, ostikwhy-blip 17, REMvisual 17, 1Popov 15, robertguss 11, rb17080 11, ramonclaudio 11, Cline Memory Bank 11, parcadei 10, taige221 10, 4mierS relay 9, continuity-kit 8, mattpocock 5." xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#2a3744" stroke-width="1">
+    <line x1="250" y1="20" x2="250" y2="412"/><line x1="355" y1="20" x2="355" y2="412"/><line x1="460" y1="20" x2="460" y2="412"/><line x1="565" y1="20" x2="565" y2="412"/><line x1="670" y1="20" x2="670" y2="412"/>
+  </g>
+  <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#9bacbd" text-anchor="middle">
+    <text x="250" y="430">0</text><text x="355" y="430">7</text><text x="460" y="430">14</text><text x="565" y="430">21</text><text x="670" y="430">28</text>
+  </g>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#e4ebf2" text-anchor="end">
+    <text x="240" y="42">handoff-upkeep (ours)</text>
+    <text x="240" y="70">session-handoff, softaworks</text>
+    <text x="240" y="98">handoff, ostikwhy-blip</text>
+    <text x="240" y="126">handoff, REMvisual</text>
+    <text x="240" y="154">Verified Transfer, 1Popov</text>
+    <text x="240" y="182">handoff, robertguss</text>
+    <text x="240" y="210">session-handoff, rb17080</text>
+    <text x="240" y="238">handoff, ramonclaudio</text>
+    <text x="240" y="266">Memory Bank, Cline</text>
+    <text x="240" y="294">create_handoff, parcadei</text>
+    <text x="240" y="322">session handoff, taige221</text>
+    <text x="240" y="350">relay, 4mierS</text>
+    <text x="240" y="378">writing-handoff, continuity-kit</text>
+    <text x="240" y="406">handoff, mattpocock</text>
+  </g>
+  <g>
+    <rect x="250" y="30" width="390" height="16" rx="2" fill="#3fc1bd"><title>handoff-upkeep: 26 of 28</title></rect>
+    <rect x="250" y="58" width="270" height="16" rx="2" fill="#46566a"><title>softaworks: 18 of 28</title></rect>
+    <rect x="250" y="86" width="255" height="16" rx="2" fill="#46566a"><title>ostikwhy-blip: 17 of 28</title></rect>
+    <rect x="250" y="114" width="255" height="16" rx="2" fill="#46566a"><title>REMvisual: 17 of 28</title></rect>
+    <rect x="250" y="142" width="225" height="16" rx="2" fill="#46566a"><title>1Popov: 15 of 28</title></rect>
+    <rect x="250" y="170" width="165" height="16" rx="2" fill="#46566a"><title>robertguss: 11 of 28</title></rect>
+    <rect x="250" y="198" width="165" height="16" rx="2" fill="#46566a"><title>rb17080: 11 of 28</title></rect>
+    <rect x="250" y="226" width="165" height="16" rx="2" fill="#46566a"><title>ramonclaudio: 11 of 28</title></rect>
+    <rect x="250" y="254" width="165" height="16" rx="2" fill="#46566a"><title>Cline Memory Bank: 11 of 28</title></rect>
+    <rect x="250" y="282" width="150" height="16" rx="2" fill="#46566a"><title>parcadei: 10 of 28</title></rect>
+    <rect x="250" y="310" width="150" height="16" rx="2" fill="#46566a"><title>taige221: 10 of 28</title></rect>
+    <rect x="250" y="338" width="135" height="16" rx="2" fill="#46566a"><title>4mierS relay: 9 of 28</title></rect>
+    <rect x="250" y="366" width="120" height="16" rx="2" fill="#46566a"><title>continuity-kit: 8 of 28</title></rect>
+    <rect x="250" y="394" width="75" height="16" rx="2" fill="#46566a"><title>mattpocock: 5 of 28</title></rect>
+  </g>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#e4ebf2">
+    <text x="646" y="42" font-weight="600">26</text><text x="526" y="70">18</text><text x="511" y="98">17</text><text x="511" y="126">17</text>
+    <text x="331" y="406">5, and 1.1M installs</text>
+  </g>
+</svg>

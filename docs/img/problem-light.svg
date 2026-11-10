@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 780 250" role="img" aria-label="Left: each session writes its own snapshot file and the next session reads a pile that drifts. Right: every session reads and rewrites one file, and a script checks it." xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#16202b"/></marker>
+    <marker id="ahc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0e7c7b"/></marker>
+  </defs>
+  <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#16202b">
+    <text x="20" y="22" font-weight="600">Per-session snapshots (most rivals)</text>
+    <text x="420" y="22" font-weight="600">One living file (handoff-upkeep)</text>
+  </g>
+  <!-- left panel -->
+  <g stroke="#16202b" fill="none" stroke-width="1.2">
+    <rect x="20" y="40" width="70" height="30" rx="3"/><rect x="120" y="40" width="70" height="30" rx="3"/><rect x="220" y="40" width="70" height="30" rx="3"/>
+    <rect x="20" y="120" width="70" height="30" rx="3"/><rect x="120" y="120" width="70" height="30" rx="3"/><rect x="220" y="120" width="70" height="30" rx="3"/>
+    <rect x="130" y="195" width="80" height="30" rx="3"/>
+    <line x1="55" y1="70" x2="55" y2="118" marker-end="url(#ah)"/><line x1="155" y1="70" x2="155" y2="118" marker-end="url(#ah)"/><line x1="255" y1="70" x2="255" y2="118" marker-end="url(#ah)"/>
+    <path d="M170 193 L55 152" stroke-dasharray="4 3" marker-end="url(#ah)"/><path d="M170 193 L155 152" stroke-dasharray="4 3" marker-end="url(#ah)"/><path d="M170 193 L255 152" stroke-dasharray="4 3" marker-end="url(#ah)"/>
+  </g>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#16202b" text-anchor="middle">
+    <text x="55" y="59">session 1</text><text x="155" y="59">session 2</text><text x="255" y="59">session 3</text>
+    <text x="55" y="139">file 1</text><text x="155" y="139">file 2</text><text x="255" y="139">file 3</text>
+    <text x="170" y="214">session 4</text>
+    <text x="330" y="100" font-size="10" text-anchor="start">writes</text>
+    <text x="300" y="180" font-size="10" text-anchor="start">reads which?</text>
+    <text x="300" y="194" font-size="10" text-anchor="start">facts drift,</text>
+    <text x="300" y="208" font-size="10" text-anchor="start">nothing checks</text>
+  </g>
+  <!-- right panel -->
+  <g stroke="#16202b" fill="none" stroke-width="1.2">
+    <rect x="420" y="40" width="70" height="30" rx="3"/><rect x="510" y="40" width="70" height="30" rx="3"/><rect x="600" y="40" width="70" height="30" rx="3"/><rect x="690" y="40" width="70" height="30" rx="3"/>
+  </g>
+  <rect x="470" y="150" width="150" height="34" rx="3" fill="#d9efee" stroke="#0e7c7b" stroke-width="1.5"/>
+  <rect x="660" y="150" width="100" height="34" rx="3" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <g stroke="#0e7c7b" fill="none" stroke-width="1.4">
+    <path d="M447 70 L520 148" marker-end="url(#ahc)"/><path d="M537 70 L548 148" marker-end="url(#ahc)"/><path d="M627 70 L575 148" marker-end="url(#ahc)"/><path d="M717 70 L602 148" marker-end="url(#ahc)"/>
+    <path d="M532 148 L463 72" marker-end="url(#ahc)"/><path d="M560 148 L553 72" marker-end="url(#ahc)"/><path d="M587 148 L643 72" marker-end="url(#ahc)"/><path d="M614 148 L733 72" marker-end="url(#ahc)"/>
+  </g>
+  <line x1="660" y1="167" x2="622" y2="167" stroke="#16202b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#16202b" text-anchor="middle">
+    <text x="455" y="59">session 1</text><text x="545" y="59">session 2</text><text x="635" y="59">session 3</text><text x="725" y="59">session 4</text>
+    <text x="545" y="171" font-weight="600">HANDOFF.md</text>
+    <text x="710" y="171" font-size="10">check script</text>
+    <text x="545" y="215" font-size="10">read at start, rewritten at end, verified before commit</text>
+  </g>
+</svg>

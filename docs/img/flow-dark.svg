@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 900 270" role="img" aria-label="Flow of one session: read the handoff, run the check script, resolve unverified lines, do the work, then at the end run the evidence script, update the sections, run the check script again and commit. The commit feeds the next session's read." xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#e4ebf2"/></marker>
+  </defs>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#e4ebf2">
+    <text x="20" y="30" font-size="12" font-weight="600">Start of session</text>
+    <text x="20" y="160" font-size="12" font-weight="600">End of session, or when the degradation trigger fires</text>
+  </g>
+  <g stroke="#e4ebf2" fill="#161e26" stroke-width="1.2">
+    <rect x="20" y="45" width="150" height="40" rx="3"/><rect x="230" y="45" width="170" height="40" rx="3"/><rect x="460" y="45" width="170" height="40" rx="3"/><rect x="690" y="45" width="150" height="40" rx="3"/>
+    <rect x="20" y="175" width="150" height="40" rx="3"/><rect x="230" y="175" width="170" height="40" rx="3"/><rect x="460" y="175" width="170" height="40" rx="3"/><rect x="690" y="175" width="150" height="40" rx="3"/>
+  </g>
+  <rect x="230" y="45" width="170" height="40" rx="3" fill="#143a39" stroke="#3fc1bd" stroke-width="1.5"/>
+  <rect x="460" y="175" width="170" height="40" rx="3" fill="#143a39" stroke="#3fc1bd" stroke-width="1.5"/>
+  <rect x="20" y="175" width="150" height="40" rx="3" fill="#143a39" stroke="#3fc1bd" stroke-width="1.5"/>
+  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#e4ebf2" text-anchor="middle">
+    <text x="95" y="63">read HANDOFF.md</text><text x="95" y="77" font-size="10">first file, ~8k tokens</text>
+    <text x="315" y="63">check_handoff.py</text><text x="315" y="77" font-size="10">10 checks, --quiet, 1 line when clean</text>
+    <text x="545" y="63">resolve [?] lines</text><text x="545" y="77" font-size="10">prove or fix, remove tag</text>
+    <text x="765" y="63">do the work</text><text x="765" y="77" font-size="10">no re-planning</text>
+    <text x="95" y="193">evidence.sh</text><text x="95" y="207" font-size="10">git log, status, runs</text>
+    <text x="315" y="193">update sections</text><text x="315" y="207" font-size="10">history, next, decisions...</text>
+    <text x="545" y="193">check_handoff.py</text><text x="545" y="207" font-size="10">exit 1 blocks a bad file</text>
+    <text x="765" y="193">commit</text><text x="765" y="207" font-size="10">with the work</text>
+  </g>
+  <g stroke="#e4ebf2" fill="none" stroke-width="1.2">
+    <line x1="170" y1="65" x2="228" y2="65" marker-end="url(#ah2)"/><line x1="400" y1="65" x2="458" y2="65" marker-end="url(#ah2)"/><line x1="630" y1="65" x2="688" y2="65" marker-end="url(#ah2)"/>
+    <line x1="170" y1="195" x2="228" y2="195" marker-end="url(#ah2)"/><line x1="400" y1="195" x2="458" y2="195" marker-end="url(#ah2)"/><line x1="630" y1="195" x2="688" y2="195" marker-end="url(#ah2)"/>
+    <path d="M765 85 L765 120 L95 120 L95 173" marker-end="url(#ah2)"/>
+    <path d="M765 215 L765 245 L95 245 L95 85" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+  </g>
+  <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#e4ebf2">
+    <text x="330" y="114">session ends, context runs low, or the agent contradicts a recorded decision</text>
+    <text x="330" y="259">next session starts here</text>
+  </g>
+</svg>
