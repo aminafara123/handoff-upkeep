@@ -59,7 +59,7 @@ One PASS, WARN or FAIL line per check, exit 1 on any FAIL. Checks:
  unverified     WARN: a [?] line older than 7 days (no-tags drops it)
  history        WARN (no-archive drops it): over 6 dated What is done entries, or an entry over 5 lines
  density        WARN: fact line over 220 chars with an aside over 40 chars, or filler words
- size           tokens as chars/4, main file only: WARN over 5,000 (Claude Code's re-read cap), FAIL over 12,000
+ size           tokens as chars/2.5 (Claude's count), main file only: WARN over 5,000 (Claude Code's re-read cap), FAIL over 12,000
 --quiet prints only WARN and FAIL lines, then one summary line.
 --new writes a skeleton with only that profile's sections, never over an existing file."""
 
@@ -221,12 +221,12 @@ def check(text, newest_commit, subjects, today, ref=""):
     out.append(("WARN" if dense else "PASS", "density", f"{len(dense)} dense lines in fact sections" +
                 (": one fact per line, cut the aside or make it its own line" if dense else ""), dense))
 
-    tok, n = len(text) // 4, len(lines)
+    tok, n = round(len(text) / 2.5), len(lines)
     out.append(("FAIL" if tok > 12000 else "WARN" if tok > 5000 else "PASS", "size",
-                f"{tok:,} tokens (chars/4), {n} lines" + (
+                f"{tok:,} tokens (chars/2.5, Claude's count), {n} lines" + (
                     ": over Claude Code's 5,000-token cap, after compaction the file comes back as a path only. "
-                    "Move cold sections (Decisions, Gotchas, Agents, Words, Weak spots, Goal) to HANDOFF-REFERENCE.md "
-                    "next to it, one pointer line in the handoff" if tok > 5000 else ", cap 5,000"), []))
+                    "Move cold sections to HANDOFF-REFERENCE.md, or print the file back with a SessionStart hook "
+                    "matching compact" if tok > 5000 else ", cap 5,000"), []))
     skip = SKIP[pname] | {SWITCHES[s] for s in switches}
     return [r for r in out if r[1] not in skip]
 

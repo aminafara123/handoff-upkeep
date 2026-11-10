@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (2026-11-11)
+
+Size estimate calibrated against Claude's own tokenizer.
+- Why: on 2026-11-11 the count_tokens endpoint (model claude-sonnet-5-5) counted the CoiPatrol hot handoff at 18,904 chars as 7,774 tokens, HANDOFF-REFERENCE.md at 13,616 chars as 5,181, and SKILL.md 1.4.0 at 4,697 chars as 1,725. That is about 2.5 characters per token on English prose, so chars/4 undercounted by about 1.56x. Claude Code's 5,000-token compaction cap is in Claude tokens.
+- Size check: tokens as chars/2.5. Thresholds unchanged, WARN over 5,000, FAIL over 12,000. The WARN names the second fix: a SessionStart hook matching compact can print the handoff back after compaction.
+- SKILL.md and SECTIONS.md: the cap stated in Claude tokens with the calibration.
+- README: one calibration line under Cost per session. The report figures stay chars/4 so the comparisons stay like for like.
+
 ## 1.4.0 (2026-11-10)
 
 Size counted in tokens, not lines, because that is what a session pays and what Claude Code caps.

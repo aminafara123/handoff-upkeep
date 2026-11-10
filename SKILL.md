@@ -10,7 +10,7 @@ description: |
   The start of a session needs only the handoff and check_handoff.py --quiet. Triggers:
   "update the handoff", "is the handoff up to date", "what does a new session need",
   "write a start-here file", "end of session", "wrap up", "make sure the next session is not lost".
-version: 1.4.0
+version: 1.4.1
 docs_url: https://aminafara123.github.io/handoff-upkeep/
 summary: One start-here file per project, kept true, so no AI session is ever lost or rebuilds what shipped.
 tags: [handoff, context, documentation, claude-code, agents, memory, onboarding, runbook]
@@ -79,4 +79,4 @@ context runs low or the session runs long.
 - One bullet, one line, never hard-wrap: each wrapped line costs its break, indent and a line number in the Read view. Editors soft-wrap.
 - One fact per line, numbers in tables not prose. History entries at most 5 lines, details in git.
 - Keep the newest 6 history entries, archive the rest to HANDOFF-HISTORY.md with one pointer line.
-- Keep H under 5,000 tokens (chars/4) so it survives compaction (warn 5,000, fail 12,000). Cold sections may live in HANDOFF-REFERENCE.md next to H, with one pointer line in H.
+- Keep H under 5,000 Claude tokens (about chars/2.5, 1.56 times OpenAI's count) so it survives compaction (warn 5,000, fail 12,000), or print it back with a SessionStart hook matching compact. Cold sections may live in HANDOFF-REFERENCE.md next to H, with one pointer line in H.

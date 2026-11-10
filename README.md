@@ -2,7 +2,7 @@
 
 One start-here file per project, kept true by a script, so every new AI session begins with the goal, the decisions and their reasons, what shipped, what is next, the numbers, the renewals and the traps.
 
-handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills folders. It comes in three sizes, lite (5 sections), standard (10) and full (15), chosen by one line in the file. A check script refuses stale dates, shipped items still listed as next, secrets and unverified claims, and prints one line when the file is clean. An evidence script collects commits, git status and the last test run at the end of a session. Claim tags, a do-not-retry list and a degradation trigger keep the file honest between sessions. It was built on, and is used daily by, a live one-person SaaS, and this is version 1.4.0.
+handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills folders. It comes in three sizes, lite (5 sections), standard (10) and full (15), chosen by one line in the file. A check script refuses stale dates, shipped items still listed as next, secrets and unverified claims, and prints one line when the file is clean. An evidence script collects commits, git status and the last test run at the end of a session. Claim tags, a do-not-retry list and a degradation trigger keep the file honest between sessions. It was built on, and is used daily by, a live one-person SaaS, and this is version 1.4.1.
 
 ## Install
 
@@ -121,6 +121,8 @@ Fourteen scores, ours included, on fourteen criteria from 0 to 2. The criteria w
 ### What it costs per session
 
 Context is the budget. The skill is designed so a session pays for one short instruction file, one read of the handoff, and two compact script outputs. Figures are characters divided by four, an approximation, measured on the live CoiPatrol handoff on Nov 10 2026.
+
+Calibration, Nov 11 2026: Claude's own tokenizer counts about 1.56 times the chars/4 estimate on this English prose. Every figure in this report is chars/4, so the comparisons stay like for like, and the real Claude cost of a session is about 1.5 times the number shown.
 
 | What the agent reads | When | Approx. tokens |
 |---|---|---:|
