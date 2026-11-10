@@ -1,339 +1,387 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Handoff Upkeep</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<style>
-/* Layout: one reading column, engineering-document register, figures full width of the column. */
-:root{
-  --bg:#f6f8fa; --surface:#ffffff; --fg:#16202b; --muted:#5a6b7d; --line:#d5dde6;
-  --accent:#0e7c7b; --accent-ink:#0a5f5e; --accent-soft:#d9efee; --bar:#aab7c4; --warn:#b2600f;
-  --display:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0f151b; --surface:#161e26; --fg:#e4ebf2; --muted:#9bacbd; --line:#2a3744;
-  --accent:#3fc1bd; --accent-ink:#8ae3df; --accent-soft:#143a39; --bar:#46566a; --warn:#e3a05a; color-scheme:dark } }
-:root[data-theme="dark"]{
-  --bg:#0f151b; --surface:#161e26; --fg:#e4ebf2; --muted:#9bacbd; --line:#2a3744;
-  --accent:#3fc1bd; --accent-ink:#8ae3df; --accent-soft:#143a39; --bar:#46566a; --warn:#e3a05a; color-scheme:dark }
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
-main{max-width:860px;margin:0 auto}
-h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-0.01em;text-wrap:balance;line-height:1.2}
-h1{font-size:clamp(28px,5vw,40px);margin:40px 0 8px}
-h2{font-size:22px;margin:48px 0 12px;padding-top:16px;border-top:1px solid var(--line)}
-h3{font-size:16px;margin:24px 0 8px}
-p{max-width:68ch;margin:0 0 12px}
-.lede{font-size:18px;color:var(--muted);max-width:60ch}
-.eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin:40px 0 0}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:24px 0 8px}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 14px 12px;min-width:0}
-.tile b{display:block;font-family:var(--display);font-size:28px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
-.tile span{display:block;font-size:13px;color:var(--muted);margin-top:6px}
-.tile small{display:block;font-size:11px;color:var(--muted);margin-top:8px;font-family:var(--display)}
-figure{margin:20px 0 28px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
-figure svg{display:block;max-width:100%;height:auto;color:var(--fg)}
-figcaption{font-size:13px;color:var(--muted);margin-top:10px;max-width:70ch}
-table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0 20px}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-family:var(--display);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
-td.num{font-family:var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
-.wrap{overflow-x:auto}
-ol,ul{padding-left:22px;max-width:70ch}
-li{margin:0 0 6px}
-code{font-family:var(--display);font-size:.92em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 18px;margin:12px 0 8px}
-.sec{display:grid;grid-template-columns:28px 1fr;gap:8px;font-size:14px;min-width:0}
-.sec b{font-family:var(--display);color:var(--accent-ink);font-weight:500}
-.note{border-left:3px solid var(--warn);padding:8px 14px;color:var(--muted);font-size:14px;max-width:70ch;margin:16px 0}
-.src{font-size:13px;color:var(--muted);word-break:break-word}
-.src a{color:var(--accent-ink)}
-a{color:var(--accent-ink)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (prefers-reduced-motion: no-preference){ .tile b{transition:color .2s} }
-</style>
-</head><body>
-<main>
-<p class="eyebrow">How it works, and why it should convince you. Version 1.3.0, Nov 10 2026</p>
-<h1>Handoff Upkeep</h1>
-<p class="lede">One start-here file per project, rewritten at the end of every AI session and checked by a script, so the next session begins with the goal, the decisions and their reasons, what shipped, what is next, the numbers, the renewals and the traps. Not a transcript summary, a living document.</p>
-
-<div class="tiles">
-  <div class="tile"><b>19</b><span>similar skills compared, 13 read in full</span><small>research, Nov 10 2026</small></div>
-  <div class="tile"><b>5 / 10 / 15</b><span>sections in the lite, standard and full profiles</span><small>SECTIONS.md</small></div>
-  <div class="tile"><b>399</b><span>lines in the live handoff it maintains</span><small>git, Nov 10 2026</small></div>
-  <div class="tile"><b>27</b><span>edits to that file in 5 working days</span><small>git log, Nov 3 to 10</small></div>
-  <div class="tile"><b>61</b><span>commits the file kept up with</span><small>git log since Nov 3</small></div>
-  <div class="tile"><b>5</b><span>mechanisms adopted from the best rivals</span><small>CHANGELOG 1.1.0</small></div>
-</div>
-
-<h2>The problem it solves</h2>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Handoff Upkeep</title><style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;color:#1f2328;background:#fff;max-width:860px;margin:0 auto;padding:32px 16px}
+h1,h2{border-bottom:1px solid #d0d7de;padding-bottom:.3em}h1{font-size:2em}h2{font-size:1.5em;margin-top:1.6em}h3{font-size:1.25em;margin-top:1.4em}
+a{color:#0969da}img{max-width:100%;height:auto}
+table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%;margin:1em 0}th,td{border:1px solid #d0d7de;padding:6px 13px;text-align:left;vertical-align:top}tr:nth-child(2n){background:#f6f8fa}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:85%;background:#f6f8fa;padding:.2em .4em;border-radius:6px}pre{background:#f6f8fa;padding:16px;overflow:auto;border-radius:6px}pre code{background:none;padding:0}
+@media (prefers-color-scheme: dark){body{color:#e6edf3;background:#0d1117}h1,h2{border-color:#30363d}th,td{border-color:#30363d}tr:nth-child(2n){background:#161b22}code,pre{background:#161b22}a{color:#4493f8}}
+</style></head>
+<body>
+<h1>handoff-upkeep</h1>
+<p>One start-here file per project, kept true by a script, so every new AI session begins with the goal, the decisions and their reasons, what shipped, what is next, the numbers, the renewals and the traps.</p>
+<p>handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills folders. It comes in three sizes, lite (5 sections), standard (10) and full (15), chosen by one line in the file. A check script refuses stale dates, shipped items still listed as next, secrets and unverified claims, and prints one line when the file is clean. An evidence script collects commits, git status and the last test run at the end of a session. Claim tags, a do-not-retry list and a degradation trigger keep the file honest between sessions. It was built on, and is used daily by, a live one-person SaaS, and this is version 1.4.1.</p>
+<h2>Install</h2>
+<p>1) Copy this folder to <code>~/.claude/skills/handoff-upkeep/</code>, or to a project's <code>.claude/skills/handoff-upkeep/</code>.<br />
+2) At the end of a session, invoke <code>/handoff-upkeep</code>.<br />
+3) Start a new file with <code>python3 scripts/check_handoff.py --new standard HANDOFF.md</code> (or <code>lite</code>, or <code>full</code>).<br />
+4) Check a file with <code>python3 scripts/check_handoff.py HANDOFF.md --quiet</code>.</p>
+<p>The start of a session needs only the handoff and the quiet check, not the skill. The scripts need only Python 3 and bash, no packages.</p>
+<h2>Files</h2>
+<ul>
+<li><code>SKILL.md</code>: when to use it, the start and end procedures, claim tags, the degradation trigger, the rules.</li>
+<li><code>scripts/check_handoff.py</code>: the check script, PASS, WARN or FAIL per check, <code>--new</code> writes a skeleton, <code>--selftest</code> tests it.</li>
+<li><code>scripts/evidence.sh</code>: end-of-session evidence, commits since Last updated, git status, test command, last run log.</li>
+<li><code>references/SECTIONS.md</code>: what goes in each of the fifteen sections, and how to create a handoff.</li>
+<li><code>references/HANDOFF-TEMPLATE.md</code>: the fifteen-section template (Profile: full).</li>
+<li><code>examples/HANDOFF-example.md</code>: a sanitized excerpt of a real handoff.</li>
+<li><code>CHANGELOG.md</code>: versions.</li>
+<li><code>docs/</code>: the report below as a web page, with its figures in <code>img/</code>.</li>
+</ul>
+<h2>The report</h2>
+<p><em>How it works and what was measured. Nov 10 2026, version 1.3.0 figures, cost line updated for 1.4.1.</em></p>
+<h3>Handoff Upkeep</h3>
+<p>One start-here file per project, rewritten at the end of every AI session and checked by a script, so the next session begins with the goal, the decisions and their reasons, what shipped, what is next, the numbers, the renewals and the traps. Not a transcript summary, a living document.</p>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Meaning</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>19</td>
+<td>similar skills compared, 13 read in full</td>
+<td>research, Nov 10 2026</td>
+</tr>
+<tr>
+<td>5 / 10 / 15</td>
+<td>sections in the lite, standard and full profiles</td>
+<td>SECTIONS.md</td>
+</tr>
+<tr>
+<td>399</td>
+<td>lines in the live handoff it maintains</td>
+<td>git, Nov 10 2026</td>
+</tr>
+<tr>
+<td>27</td>
+<td>edits to that file in 5 working days</td>
+<td>git log, Nov 3 to 10</td>
+</tr>
+<tr>
+<td>61</td>
+<td>commits the file kept up with</td>
+<td>git log since Nov 3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>mechanisms adopted from the best rivals</td>
+<td>CHANGELOG 1.1.0</td>
+</tr>
+</tbody>
+</table>
+<h3>The problem it solves</h3>
 <p>A session of agent work ends and its context is gone. The next session knows the code but not the reasons. It reopens settled decisions, rebuilds a feature that shipped last week, and asks the owner questions they already answered. Most handoff skills answer this by summarizing the chat into a new file every time. Those files pile up, disagree with each other, and nobody checks them.</p>
-
-<figure>
-<svg viewBox="0 0 780 250" role="img" aria-label="Left: each session writes its own snapshot file and the next session reads a pile that drifts. Right: every session reads and rewrites one file, and a script checks it." xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
-    <marker id="ahc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/></marker>
-  </defs>
-  <g font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">
-    <text x="20" y="22" font-weight="600">Per-session snapshots (most rivals)</text>
-    <text x="420" y="22" font-weight="600">One living file (handoff-upkeep)</text>
-  </g>
-  <!-- left panel -->
-  <g stroke="currentColor" fill="none" stroke-width="1.2">
-    <rect x="20" y="40" width="70" height="30" rx="3"/><rect x="120" y="40" width="70" height="30" rx="3"/><rect x="220" y="40" width="70" height="30" rx="3"/>
-    <rect x="20" y="120" width="70" height="30" rx="3"/><rect x="120" y="120" width="70" height="30" rx="3"/><rect x="220" y="120" width="70" height="30" rx="3"/>
-    <rect x="130" y="195" width="80" height="30" rx="3"/>
-    <line x1="55" y1="70" x2="55" y2="118" marker-end="url(#ah)"/><line x1="155" y1="70" x2="155" y2="118" marker-end="url(#ah)"/><line x1="255" y1="70" x2="255" y2="118" marker-end="url(#ah)"/>
-    <path d="M170 193 L55 152" stroke-dasharray="4 3" marker-end="url(#ah)"/><path d="M170 193 L155 152" stroke-dasharray="4 3" marker-end="url(#ah)"/><path d="M170 193 L255 152" stroke-dasharray="4 3" marker-end="url(#ah)"/>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" text-anchor="middle">
-    <text x="55" y="59">session 1</text><text x="155" y="59">session 2</text><text x="255" y="59">session 3</text>
-    <text x="55" y="139">file 1</text><text x="155" y="139">file 2</text><text x="255" y="139">file 3</text>
-    <text x="170" y="214">session 4</text>
-    <text x="330" y="100" font-size="10" text-anchor="start">writes</text>
-    <text x="300" y="180" font-size="10" text-anchor="start">reads which?</text>
-    <text x="300" y="194" font-size="10" text-anchor="start">facts drift,</text>
-    <text x="300" y="208" font-size="10" text-anchor="start">nothing checks</text>
-  </g>
-  <!-- right panel -->
-  <g stroke="currentColor" fill="none" stroke-width="1.2">
-    <rect x="420" y="40" width="70" height="30" rx="3"/><rect x="510" y="40" width="70" height="30" rx="3"/><rect x="600" y="40" width="70" height="30" rx="3"/><rect x="690" y="40" width="70" height="30" rx="3"/>
-  </g>
-  <rect x="470" y="150" width="150" height="34" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-  <rect x="660" y="150" width="100" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <g stroke="var(--accent)" fill="none" stroke-width="1.4">
-    <path d="M447 70 L520 148" marker-end="url(#ahc)"/><path d="M537 70 L548 148" marker-end="url(#ahc)"/><path d="M627 70 L575 148" marker-end="url(#ahc)"/><path d="M717 70 L602 148" marker-end="url(#ahc)"/>
-    <path d="M532 148 L463 72" marker-end="url(#ahc)"/><path d="M560 148 L553 72" marker-end="url(#ahc)"/><path d="M587 148 L643 72" marker-end="url(#ahc)"/><path d="M614 148 L733 72" marker-end="url(#ahc)"/>
-  </g>
-  <line x1="660" y1="167" x2="622" y2="167" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah)"/>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" text-anchor="middle">
-    <text x="455" y="59">session 1</text><text x="545" y="59">session 2</text><text x="635" y="59">session 3</text><text x="725" y="59">session 4</text>
-    <text x="545" y="171" font-weight="600">HANDOFF.md</text>
-    <text x="710" y="171" font-size="10">check script</text>
-    <text x="545" y="215" font-size="10">read at start, rewritten at end, verified before commit</text>
-  </g>
-</svg>
-<figcaption>Twelve of thirteen readable rivals write a new file per session. Handoff Upkeep keeps one file that every session reads at the start and rewrites at the end, and a script refuses the rewrite when it finds stale dates, shipped items still listed as next, secrets, or unverified claims.</figcaption>
-</figure>
-
-<h2>How a session runs</h2>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="img/problem-dark.svg"><img alt="Left: each session writes its own snapshot file and the next session reads a pile that drifts. Right: every session reads and rewrites one file, and a script checks it." src="img/problem-light.svg"></picture></p>
+<p><em>Twelve of thirteen readable rivals write a new file per session. Handoff Upkeep keeps one file that every session reads at the start and rewrites at the end, and a script refuses the rewrite when it finds stale dates, shipped items still listed as next, secrets, or unverified claims.</em></p>
+<h3>How a session runs</h3>
 <p>The skill is two short procedures and two scripts. Everything mechanical is a script call so the agent reads one compact output instead of running eight commands.</p>
-
-<figure>
-<svg viewBox="0 0 900 270" role="img" aria-label="Flow of one session: read the handoff, run the check script, resolve unverified lines, do the work, then at the end run the evidence script, update the sections, run the check script again and commit. The commit feeds the next session's read." xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
-  </defs>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
-    <text x="20" y="30" font-size="12" font-weight="600">Start of session</text>
-    <text x="20" y="160" font-size="12" font-weight="600">End of session, or when the degradation trigger fires</text>
-  </g>
-  <g stroke="currentColor" fill="var(--surface)" stroke-width="1.2">
-    <rect x="20" y="45" width="150" height="40" rx="3"/><rect x="230" y="45" width="170" height="40" rx="3"/><rect x="460" y="45" width="170" height="40" rx="3"/><rect x="690" y="45" width="150" height="40" rx="3"/>
-    <rect x="20" y="175" width="150" height="40" rx="3"/><rect x="230" y="175" width="170" height="40" rx="3"/><rect x="460" y="175" width="170" height="40" rx="3"/><rect x="690" y="175" width="150" height="40" rx="3"/>
-  </g>
-  <rect x="230" y="45" width="170" height="40" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-  <rect x="460" y="175" width="170" height="40" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-  <rect x="20" y="175" width="150" height="40" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" text-anchor="middle">
-    <text x="95" y="63">read HANDOFF.md</text><text x="95" y="77" font-size="10">first file, ~8k tokens</text>
-    <text x="315" y="63">check_handoff.py</text><text x="315" y="77" font-size="10">10 checks, --quiet, 1 line when clean</text>
-    <text x="545" y="63">resolve [?] lines</text><text x="545" y="77" font-size="10">prove or fix, remove tag</text>
-    <text x="765" y="63">do the work</text><text x="765" y="77" font-size="10">no re-planning</text>
-    <text x="95" y="193">evidence.sh</text><text x="95" y="207" font-size="10">git log, status, runs</text>
-    <text x="315" y="193">update sections</text><text x="315" y="207" font-size="10">history, next, decisions...</text>
-    <text x="545" y="193">check_handoff.py</text><text x="545" y="207" font-size="10">exit 1 blocks a bad file</text>
-    <text x="765" y="193">commit</text><text x="765" y="207" font-size="10">with the work</text>
-  </g>
-  <g stroke="currentColor" fill="none" stroke-width="1.2">
-    <line x1="170" y1="65" x2="228" y2="65" marker-end="url(#ah2)"/><line x1="400" y1="65" x2="458" y2="65" marker-end="url(#ah2)"/><line x1="630" y1="65" x2="688" y2="65" marker-end="url(#ah2)"/>
-    <line x1="170" y1="195" x2="228" y2="195" marker-end="url(#ah2)"/><line x1="400" y1="195" x2="458" y2="195" marker-end="url(#ah2)"/><line x1="630" y1="195" x2="688" y2="195" marker-end="url(#ah2)"/>
-    <path d="M765 85 L765 120 L95 120 L95 173" marker-end="url(#ah2)"/>
-    <path d="M765 215 L765 245 L95 245 L95 85" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor">
-    <text x="330" y="114">session ends, context runs low, or the agent contradicts a recorded decision</text>
-    <text x="330" y="259">next session starts here</text>
-  </g>
-</svg>
-<figcaption>The highlighted boxes are the script calls. Before version 1.1 the agent ran those checks by hand with greps. Now it reads one short output at the start and one at the end, and the skill file itself is loaded once, at the end.</figcaption>
-</figure>
-
-<h3>What the check script refuses</h3>
-<ol>
-  <li>A "Last updated" date older than the newest commit.</li>
-  <li>A missing or misordered section.</li>
-  <li>Relative time words in facts ("$21 a year today"). Procedures may keep them.</li>
-  <li>TODO, TBD or ??? that is not phrased as a question for the owner.</li>
-  <li>A "What is next" bullet whose words match a commit subject since the last update (maybe shipped).</li>
-  <li>Any secret pattern (API keys, tokens, passwords, private keys). This one is a hard fail.</li>
-  <li>Lines tagged <code>[?]</code> older than seven days (claims never verified).</li>
-  <li>A file over 5,000 tokens (warn, past that size Claude Code drops it after compaction) or 12,000 (fail), because a handoff nobody reads is no handoff.</li>
-  <li>More than six history entries, or an entry over five lines: older entries belong in the linked archive, details belong in git.</li>
-  <li>Dense lines in fact sections: long asides in parentheses or filler words. One fact per line.</li>
-</ol>
-
-<h2>What the file holds</h2>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="img/flow-dark.svg"><img alt="Flow of one session: read the handoff, run the check script, resolve unverified lines, do the work, then at the end run the evidence script, update the sections, run the check script again and commit. The commit feeds the next session's read." src="img/flow-light.svg"></picture></p>
+<p><em>The highlighted boxes are the script calls. Before version 1.1 the agent ran those checks by hand with greps. Now it reads one short output at the start and one at the end, and the skill file itself is loaded once, at the end.</em></p>
+<h4>What the check script refuses</h4>
+<p>1) A "Last updated" date older than the newest commit.<br />
+2) A missing or misordered section.<br />
+3) Relative time words in facts ("$21 a year today"). Procedures may keep them.<br />
+4) TODO, TBD or ??? that is not phrased as a question for the owner.<br />
+5) A "What is next" bullet whose words match a commit subject since the last update (maybe shipped).<br />
+6) Any secret pattern (API keys, tokens, passwords, private keys). This one is a hard fail.<br />
+7) Lines tagged <code>[?]</code> older than seven days (claims never verified).<br />
+8) A file over 5,000 tokens (warn, past that size Claude Code drops it after compaction) or 12,000 (fail), because a handoff nobody reads is no handoff.<br />
+9) More than six history entries, or an entry over five lines: older entries belong in the linked archive, details belong in git.<br />
+10) Dense lines in fact sections: long asides in parentheses or filler words. One fact per line.</p>
+<h3>What the file holds</h3>
 <p>Fifteen sections in a fixed order. The first two are the ones most handoffs lack and the ones a new session needs most.</p>
-<div class="grid">
-  <div class="sec"><b>01</b><span>What this is: product, users, owner, what is live, spend</span></div>
-  <div class="sec"><b>02</b><span>Goal and strategy: why, success in order, decision dates, who buys, how we win, how customers arrive</span></div>
-  <div class="sec"><b>03</b><span>Map of the folder: paths, scripts to run instead of hand steps</span></div>
-  <div class="sec"><b>04</b><span>Secrets and accounts: locations only, never values</span></div>
-  <div class="sec"><b>05</b><span>Rules for working with the owner</span></div>
-  <div class="sec"><b>06</b><span>First ten minutes of a session: the checklist</span></div>
-  <div class="sec"><b>07</b><span>What is done: dated history, facts and numbers</span></div>
-  <div class="sec"><b>08</b><span>What is next: dated, nearest first, nothing that shipped</span></div>
-  <div class="sec"><b>09</b><span>Known weak spots</span></div>
-  <div class="sec"><b>10</b><span>Agents and routines: schedules, models, logs</span></div>
-  <div class="sec"><b>11</b><span>Decisions and why, plus Tried and rejected, do not retry</span></div>
-  <div class="sec"><b>12</b><span>Key numbers: prices, limits, caps, ports, spend</span></div>
-  <div class="sec"><b>13</b><span>Renewals and expiries with dates and the renewal command</span></div>
-  <div class="sec"><b>14</b><span>Gotchas that cost time: trigger and action, removed once fixed</span></div>
-  <div class="sec"><b>15</b><span>Words we use: the project's vocabulary</span></div>
-</div>
-
-<h2>Five mechanisms taken from the best rivals</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>What this is: product, users, owner, what is live, spend</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Goal and strategy: why, success in order, decision dates, who buys, how we win, how customers arrive</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Map of the folder: paths, scripts to run instead of hand steps</td>
+</tr>
+<tr>
+<td>04</td>
+<td>Secrets and accounts: locations only, never values</td>
+</tr>
+<tr>
+<td>05</td>
+<td>Rules for working with the owner</td>
+</tr>
+<tr>
+<td>06</td>
+<td>First ten minutes of a session: the checklist</td>
+</tr>
+<tr>
+<td>07</td>
+<td>What is done: dated history, facts and numbers</td>
+</tr>
+<tr>
+<td>08</td>
+<td>What is next: dated, nearest first, nothing that shipped</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Known weak spots</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Agents and routines: schedules, models, logs</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Decisions and why, plus Tried and rejected, do not retry</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Key numbers: prices, limits, caps, ports, spend</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Renewals and expiries with dates and the renewal command</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Gotchas that cost time: trigger and action, removed once fixed</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Words we use: the project's vocabulary</td>
+</tr>
+</tbody>
+</table>
+<h3>Five mechanisms taken from the best rivals</h3>
 <p>On Nov 10 2026 an Opus research agent read thirteen similar skills in full and scored them. Where a rival did something ours did not, version 1.1 adopted it. Each row names the source so you can check.</p>
-<div class="wrap"><table>
-  <tr><th>Mechanism</th><th>Seen in</th><th>How Handoff Upkeep does it</th></tr>
-  <tr><td>Automated checks instead of hand greps</td><td>softaworks session-handoff: staleness script, "Do not finalize a handoff with secrets detected or score below 70"</td><td><code>check_handoff.py</code>, eight checks, exit 1 on any fail, under 15 lines of output when clean</td></tr>
-  <tr><td>Claims tagged verified or remembered</td><td>ostikwhy-blip handoff: "[V] only if confirmed by a command or file read during THIS handoff run"</td><td>Unverified lines end in <code>[?]</code>. The next session proves or fixes them first. The script lists them and warns after seven days</td></tr>
-  <tr><td>Failed approaches kept as a do-not-retry list</td><td>ostikwhy-blip ("DO NOT RETRY THESE"), REMvisual, rb17080, robertguss</td><td>"Tried and rejected, do not retry" under Decisions and why, one line each with the reason</td></tr>
-  <tr><td>Trigger when the session degrades</td><td>ostikwhy-blip: "If you notice degradation... say ONE sentence"</td><td>Contradicted a decision, re-derived something settled, misremembered a path, or context low: one sentence to the owner, then the history step now, not at the end</td></tr>
-  <tr><td>Proof of use shipped with the skill</td><td>softaworks (evals), REMvisual (changelog and tests)</td><td>A sanitized real handoff excerpt, a CHANGELOG, and the measured cost per session below</td></tr>
-</table></div>
-
-<h2>How it compares</h2>
-<p>Fourteen scores, ours included, on fourteen criteria from 0 to 2. The criteria were written from our own feature list, so the gap flatters us. Read it as "most complete on paper", and read the rows above for where rivals led before 1.1.</p>
-
-<figure>
-<svg viewBox="0 0 760 445" role="img" aria-label="Horizontal bar chart of total scores out of 28: handoff-upkeep 26, softaworks 18, ostikwhy-blip 17, REMvisual 17, 1Popov 15, robertguss 11, rb17080 11, ramonclaudio 11, Cline Memory Bank 11, parcadei 10, taige221 10, 4mierS relay 9, continuity-kit 8, mattpocock 5." xmlns="http://www.w3.org/2000/svg">
-  <g stroke="var(--line)" stroke-width="1">
-    <line x1="250" y1="20" x2="250" y2="412"/><line x1="355" y1="20" x2="355" y2="412"/><line x1="460" y1="20" x2="460" y2="412"/><line x1="565" y1="20" x2="565" y2="412"/><line x1="670" y1="20" x2="670" y2="412"/>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)" text-anchor="middle">
-    <text x="250" y="430">0</text><text x="355" y="430">7</text><text x="460" y="430">14</text><text x="565" y="430">21</text><text x="670" y="430">28</text>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" text-anchor="end">
-    <text x="240" y="42">handoff-upkeep (ours)</text>
-    <text x="240" y="70">session-handoff, softaworks</text>
-    <text x="240" y="98">handoff, ostikwhy-blip</text>
-    <text x="240" y="126">handoff, REMvisual</text>
-    <text x="240" y="154">Verified Transfer, 1Popov</text>
-    <text x="240" y="182">handoff, robertguss</text>
-    <text x="240" y="210">session-handoff, rb17080</text>
-    <text x="240" y="238">handoff, ramonclaudio</text>
-    <text x="240" y="266">Memory Bank, Cline</text>
-    <text x="240" y="294">create_handoff, parcadei</text>
-    <text x="240" y="322">session handoff, taige221</text>
-    <text x="240" y="350">relay, 4mierS</text>
-    <text x="240" y="378">writing-handoff, continuity-kit</text>
-    <text x="240" y="406">handoff, mattpocock</text>
-  </g>
-  <g>
-    <rect x="250" y="30" width="390" height="16" rx="2" fill="var(--accent)"><title>handoff-upkeep: 26 of 28</title></rect>
-    <rect x="250" y="58" width="270" height="16" rx="2" fill="var(--bar)"><title>softaworks: 18 of 28</title></rect>
-    <rect x="250" y="86" width="255" height="16" rx="2" fill="var(--bar)"><title>ostikwhy-blip: 17 of 28</title></rect>
-    <rect x="250" y="114" width="255" height="16" rx="2" fill="var(--bar)"><title>REMvisual: 17 of 28</title></rect>
-    <rect x="250" y="142" width="225" height="16" rx="2" fill="var(--bar)"><title>1Popov: 15 of 28</title></rect>
-    <rect x="250" y="170" width="165" height="16" rx="2" fill="var(--bar)"><title>robertguss: 11 of 28</title></rect>
-    <rect x="250" y="198" width="165" height="16" rx="2" fill="var(--bar)"><title>rb17080: 11 of 28</title></rect>
-    <rect x="250" y="226" width="165" height="16" rx="2" fill="var(--bar)"><title>ramonclaudio: 11 of 28</title></rect>
-    <rect x="250" y="254" width="165" height="16" rx="2" fill="var(--bar)"><title>Cline Memory Bank: 11 of 28</title></rect>
-    <rect x="250" y="282" width="150" height="16" rx="2" fill="var(--bar)"><title>parcadei: 10 of 28</title></rect>
-    <rect x="250" y="310" width="150" height="16" rx="2" fill="var(--bar)"><title>taige221: 10 of 28</title></rect>
-    <rect x="250" y="338" width="135" height="16" rx="2" fill="var(--bar)"><title>4mierS relay: 9 of 28</title></rect>
-    <rect x="250" y="366" width="120" height="16" rx="2" fill="var(--bar)"><title>continuity-kit: 8 of 28</title></rect>
-    <rect x="250" y="394" width="75" height="16" rx="2" fill="var(--bar)"><title>mattpocock: 5 of 28</title></rect>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
-    <text x="646" y="42" font-weight="600">26</text><text x="526" y="70">18</text><text x="511" y="98">17</text><text x="511" y="126">17</text>
-    <text x="331" y="406">5, and 1.1M installs</text>
-  </g>
-</svg>
-<figcaption>Total of fourteen criteria, each 0 to 2. Source: handoff-skills-comparison-2026-11-10.md, section 3. The most installed skill, mattpocock's 16-line handoff, scores lowest because it only summarizes the chat. That is the market's current idea of a handoff.</figcaption>
-</figure>
-
-<figure>
-<svg viewBox="0 0 560 120" role="img" aria-label="Words that recur in the names of the 19 skills found: handoff 15, session 6, memory 3, continuity 2." xmlns="http://www.w3.org/2000/svg">
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" text-anchor="end">
-    <text x="90" y="24">handoff</text><text x="90" y="50">session</text><text x="90" y="76">memory</text><text x="90" y="102">continuity</text>
-  </g>
-  <g fill="var(--bar)">
-    <rect x="100" y="12" width="375" height="16" rx="2"><title>handoff: 15 of 19 names</title></rect>
-    <rect x="100" y="38" width="150" height="16" rx="2"><title>session: 6 of 19 names</title></rect>
-    <rect x="100" y="64" width="75" height="16" rx="2"><title>memory: 3 of 19 names</title></rect>
-    <rect x="100" y="90" width="50" height="16" rx="2"><title>continuity: 2 of 19 names</title></rect>
-  </g>
-  <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
-    <text x="481" y="24">15 of 19</text><text x="256" y="50">6</text><text x="181" y="76">3</text><text x="156" y="102">2</text>
-  </g>
-</svg>
-<figcaption>What buyers search for. "Handoff" is in fifteen of nineteen names, which is why ours keeps the word. No rival name uses "start here" or "brief".</figcaption>
-</figure>
-
-<h2>What it costs per session</h2>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Seen in</th>
+<th>How Handoff Upkeep does it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Automated checks instead of hand greps</td>
+<td>softaworks session-handoff: staleness script, "Do not finalize a handoff with secrets detected or score below 70"</td>
+<td><code>check_handoff.py</code>, eight checks, exit 1 on any fail, under 15 lines of output when clean</td>
+</tr>
+<tr>
+<td>Claims tagged verified or remembered</td>
+<td>ostikwhy-blip handoff: "[V] only if confirmed by a command or file read during THIS handoff run"</td>
+<td>Unverified lines end in <code>[?]</code>. The next session proves or fixes them first. The script lists them and warns after seven days</td>
+</tr>
+<tr>
+<td>Failed approaches kept as a do-not-retry list</td>
+<td>ostikwhy-blip ("DO NOT RETRY THESE"), REMvisual, rb17080, robertguss</td>
+<td>"Tried and rejected, do not retry" under Decisions and why, one line each with the reason</td>
+</tr>
+<tr>
+<td>Trigger when the session degrades</td>
+<td>ostikwhy-blip: "If you notice degradation... say ONE sentence"</td>
+<td>Contradicted a decision, re-derived something settled, misremembered a path, or context low: one sentence to the owner, then the history step now, not at the end</td>
+</tr>
+<tr>
+<td>Proof of use shipped with the skill</td>
+<td>softaworks (evals), REMvisual (changelog and tests)</td>
+<td>A sanitized real handoff excerpt, a CHANGELOG, and the measured cost per session below</td>
+</tr>
+</tbody>
+</table>
+<h3>How it compares</h3>
+<p>Fourteen skills, ours included, scored 0 to 2 on fourteen criteria from each skill's published files on Nov 10 2026. The criteria list is in handoff-skills-comparison-2026-11-10.md, section 3. The table above names where a rival led before 1.1.</p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="img/scores-dark.svg"><img alt="Horizontal bar chart of total scores out of 28: handoff-upkeep 26, softaworks 18, ostikwhy-blip 17, REMvisual 17, 1Popov 15, robertguss 11, rb17080 11, ramonclaudio 11, Cline Memory Bank 11, parcadei 10, taige221 10, 4mierS relay 9, continuity-kit 8, mattpocock 5." src="img/scores-light.svg"></picture></p>
+<p><em>Total of fourteen criteria, each 0 to 2. Source: handoff-skills-comparison-2026-11-10.md, section 3. The most installed skill, mattpocock's 16-line handoff, scores lowest because it only summarizes the chat. That is the market's current idea of a handoff.</em></p>
+<h3>What it costs per session</h3>
 <p>Context is the budget. The skill is designed so a session pays for one short instruction file, one read of the handoff, and two compact script outputs. Figures are characters divided by four, an approximation, measured on the live CoiPatrol handoff on Nov 10 2026.</p>
-<div class="wrap"><table>
-  <tr><th>What the agent reads</th><th>When</th><th>Approx. tokens</th></tr>
-  <tr><td>SKILL.md (the procedure)</td><td>once, at the end of the session</td><td class="num">1,100</td></tr>
-  <tr><td>HANDOFF.md, 399 lines after the archive rule</td><td>start of session</td><td class="num">7,770</td></tr>
-  <tr><td>check_handoff.py --quiet, one warning</td><td>start and end</td><td class="num">96</td></tr>
-  <tr><td>evidence.sh output</td><td>end of session</td><td class="num">294</td></tr>
-  <tr><td>HANDOFF-HISTORY.md, archived entries</td><td>only when an old entry matters</td><td class="num">1,520</td></tr>
-  <tr><td>references/SECTIONS.md</td><td>only when creating a handoff from scratch</td><td class="num">1,110</td></tr>
-</table></div>
+<p>Calibration, Nov 11 2026: Claude's own tokenizer counts about 1.56 times the chars/4 estimate on this English prose. Every figure in this report is chars/4, so the comparisons stay like for like, and the real Claude cost of a session is about 1.5 times the number shown.</p>
+<table>
+<thead>
+<tr>
+<th>What the agent reads</th>
+<th>When</th>
+<th style="text-align: right;">Approx. tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKILL.md (the procedure)</td>
+<td>once, at the end of the session</td>
+<td style="text-align: right;">1,100</td>
+</tr>
+<tr>
+<td>HANDOFF.md, 399 lines after the archive rule</td>
+<td>start of session</td>
+<td style="text-align: right;">7,770</td>
+</tr>
+<tr>
+<td>check_handoff.py --quiet, one warning</td>
+<td>start and end</td>
+<td style="text-align: right;">96</td>
+</tr>
+<tr>
+<td>evidence.sh output</td>
+<td>end of session</td>
+<td style="text-align: right;">294</td>
+</tr>
+<tr>
+<td>HANDOFF-HISTORY.md, archived entries</td>
+<td>only when an old entry matters</td>
+<td style="text-align: right;">1,520</td>
+</tr>
+<tr>
+<td>references/SECTIONS.md</td>
+<td>only when creating a handoff from scratch</td>
+<td style="text-align: right;">1,110</td>
+</tr>
+</tbody>
+</table>
 <p>A full session therefore costs about 9,350 tokens of reading, under 5% of a 200,000-token context, and the handoff itself is 83% of that. Version 1.0 cost about 11,900: the procedure was 2,230 tokens and loaded twice, and the agent ran six greps and six git commands by hand. Version 1.1 moved the section definitions into a reference read only when creating a file, and replaced the hand commands with two scripts. Version 1.2 loads the skill once, at the end, prints only warnings, and adds the archive rule: the newest six history entries stay at five lines each, older ones move to a linked file. On the live handoff that rule alone cut the read from 8,700 to 7,750 tokens while keeping every number, name and date in the archive.</p>
-
-<h3>Three sizes, one line to choose</h3>
+<p>1.4.0 (2026-11-10, chars/4): SKILL.md 4,697 chars, about 1,174 tokens. The CoiPatrol handoff unwrapped to 210 lines, 30,579 chars, about 7,650 tokens, still over Claude Code's 5,000-token re-read cap, so the check warns. Quiet check 1,046 chars, about 262 tokens (three warnings), evidence.sh about 294 as before.</p>
+<h4>Three sizes, one line to choose</h4>
 <p>Not every project needs fifteen sections. A line at the top of the file, <code>Profile: lite</code>, <code>standard</code> or <code>full</code>, picks the section set, and the check script runs only the checks that apply. Two switches, <code>no-tags</code> and <code>no-archive</code>, drop a mechanism without changing the size. Upgrading is changing the word and adding the sections the check names. Measured by section on the live 398-line handoff:</p>
-<div class="wrap"><table>
-  <tr><th>Profile</th><th>Sections</th><th>Read per session</th><th>For</th></tr>
-  <tr><td>lite</td><td>5: what this is, start checklist, what is next, decisions, gotchas</td><td class="num">about 2,740</td><td>a side project, a one-week job</td></tr>
-  <tr><td>standard</td><td>10: lite plus goal and strategy, folder map, owner rules, history, key numbers</td><td class="num">about 6,190</td><td>most real projects</td></tr>
-  <tr><td>full</td><td>15: standard plus secret locations, weak spots, routines, renewals, vocabulary</td><td class="num">about 7,760</td><td>a live product with accounts and schedules</td></tr>
-</table></div>
-
-<h3>Against the rivals, same yardstick</h3>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Sections</th>
+<th>Read per session</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lite</td>
+<td>5: what this is, start checklist, what is next, decisions, gotchas</td>
+<td>about 2,740</td>
+<td>a side project, a one-week job</td>
+</tr>
+<tr>
+<td>standard</td>
+<td>10: lite plus goal and strategy, folder map, owner rules, history, key numbers</td>
+<td>about 6,190</td>
+<td>most real projects</td>
+</tr>
+<tr>
+<td>full</td>
+<td>15: standard plus secret locations, weak spots, routines, renewals, vocabulary</td>
+<td>about 7,760</td>
+<td>a live product with accounts and schedules</td>
+</tr>
+</tbody>
+</table>
+<h4>Against the rivals, same yardstick</h4>
 <p>Characters divided by four, measured Nov 10 2026 on each skill's own files. Rivals that write a new file every session pay in output tokens, the slow and expensive kind. Ours edits about twenty lines.</p>
-<div class="wrap"><table>
-  <tr><th>Skill</th><th>Procedure file</th><th>What the next session reads</th><th>What each session writes</th></tr>
-  <tr><td>handoff-upkeep (ours)</td><td class="num">1,174</td><td>7,644 for one 210-line file (1.4.0, lines unwrapped), warn at 5,000 tokens, fail at 12,000</td><td>about 450, 21 lines on average over 24 edits</td></tr>
-  <tr><td>handoff, mattpocock</td><td class="num">235</td><td>a chat summary in /tmp, size not stated</td><td>a whole summary each session</td></tr>
-  <tr><td>handoff, ostikwhy-blip</td><td class="num">1,470</td><td>about 2,700, target 250 lines, ceiling 400</td><td>the whole file each session, about 2,700</td></tr>
-  <tr><td>session-handoff, softaworks</td><td class="num">1,580</td><td>a per-session file, size not stated, plus script output</td><td>the whole file each session</td></tr>
-  <tr><td>handoff, REMvisual</td><td class="num">3,280</td><td>6,000 to 16,000, its own target is 300 to 800 lines</td><td>the whole file each session, 6,000 to 16,000</td></tr>
-  <tr><td>Memory Bank, Cline</td><td class="num">1,810</td><td>six files read at every task, sizes depend on the project</td><td>the files that changed</td></tr>
-  <tr><td>handoff, ramonclaudio</td><td class="num">3,870</td><td>CONTEXT.md and HANDOFF.md, sizes not stated</td><td>both files</td></tr>
-  <tr><td>handoff, robertguss</td><td class="num">1,610</td><td>a session handoff, size not stated</td><td>the whole file</td></tr>
-  <tr><td>create_handoff, parcadei</td><td class="num">1,320</td><td>a YAML handoff, size not stated</td><td>the whole file</td></tr>
-  <tr><td>session-handoff, rb17080</td><td class="num">1,150</td><td>HANDOFF.md built from git data, size not stated</td><td>the whole file</td></tr>
-  <tr><td>writing-handoff, continuity-kit</td><td class="num">760</td><td>a short topic handoff, size not stated</td><td>the whole file</td></tr>
-</table></div>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th style="text-align: right;">Procedure file</th>
+<th>What the next session reads</th>
+<th>What each session writes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>handoff-upkeep (ours)</td>
+<td style="text-align: right;">1,174</td>
+<td>7,644 for one 210-line file (1.4.0, lines unwrapped), warn at 5,000 tokens, fail at 12,000</td>
+<td>about 450, 21 lines on average over 24 edits</td>
+</tr>
+<tr>
+<td>handoff, mattpocock</td>
+<td style="text-align: right;">235</td>
+<td>a chat summary in /tmp, size not stated</td>
+<td>a whole summary each session</td>
+</tr>
+<tr>
+<td>handoff, ostikwhy-blip</td>
+<td style="text-align: right;">1,470</td>
+<td>about 2,700, target 250 lines, ceiling 400</td>
+<td>the whole file each session, about 2,700</td>
+</tr>
+<tr>
+<td>session-handoff, softaworks</td>
+<td style="text-align: right;">1,580</td>
+<td>a per-session file, size not stated, plus script output</td>
+<td>the whole file each session</td>
+</tr>
+<tr>
+<td>handoff, REMvisual</td>
+<td style="text-align: right;">3,280</td>
+<td>6,000 to 16,000, its own target is 300 to 800 lines</td>
+<td>the whole file each session, 6,000 to 16,000</td>
+</tr>
+<tr>
+<td>Memory Bank, Cline</td>
+<td style="text-align: right;">1,810</td>
+<td>six files read at every task, sizes depend on the project</td>
+<td>the files that changed</td>
+</tr>
+<tr>
+<td>handoff, ramonclaudio</td>
+<td style="text-align: right;">3,870</td>
+<td>CONTEXT.md and HANDOFF.md, sizes not stated</td>
+<td>both files</td>
+</tr>
+<tr>
+<td>handoff, robertguss</td>
+<td style="text-align: right;">1,610</td>
+<td>a session handoff, size not stated</td>
+<td>the whole file</td>
+</tr>
+<tr>
+<td>create_handoff, parcadei</td>
+<td style="text-align: right;">1,320</td>
+<td>a YAML handoff, size not stated</td>
+<td>the whole file</td>
+</tr>
+<tr>
+<td>session-handoff, rb17080</td>
+<td style="text-align: right;">1,150</td>
+<td>HANDOFF.md built from git data, size not stated</td>
+<td>the whole file</td>
+</tr>
+<tr>
+<td>writing-handoff, continuity-kit</td>
+<td style="text-align: right;">760</td>
+<td>a short topic handoff, size not stated</td>
+<td>the whole file</td>
+</tr>
+</tbody>
+</table>
 <p>Without any handoff, a session that rebuilds context from the code reads app.py (about 53,900 tokens), the templates (26,400) and the git log (1,400), around 82,000 tokens, and still learns none of the reasons.</p>
-
-<h2>Evidence from real use</h2>
+<h3>Evidence from real use</h3>
 <p>The skill was written on Nov 10 2026 from the practice that produced the CoiPatrol handoff, the start-here file of a live one-person SaaS run by Claude Code agents. That file is the test bed.</p>
-<ol>
-  <li>Created Nov 3 2026. Edited in 27 commits across 5 working days while 61 commits of product work landed. Now 399 lines in 15 sections, with older history in a linked archive.</li>
-  <li>Nov 10, morning audit: three "What is next" bullets still described work that had shipped on Nov 5. A fresh session could have rebuilt it. The audit also found the file said what the product was but not why it existed, which became the Goal and strategy section.</li>
-  <li>Nov 10, first run of the verification checks: two stale facts caught ("$21 a year today", a local model name that no longer matched the health output). The same run exposed a flaw in the skill's own unknowns check, which was fixed before release.</li>
-  <li>Nov 10, research: 19 similar skills found, 13 read in full and scored, five load-bearing claims re-fetched by a second session. Four verified word for word, one not independently reachable (a browser-rendered page).</li>
-</ol>
-
-<h2>Limits, stated plainly</h2>
-<div class="note">The scoring criteria came from our own feature list, so the comparison is a completeness check, not a neutral benchmark. The concurrency guard only notices files changed in the last hour and asks the owner, there is no lock. Token figures are approximate. The agensi listing "Session Handoff" could not be read, its 15 sections and 7 uses come from the research agent's fetch alone. Real use is one project over one week.</div>
-
-<h2>Sources</h2>
-<p class="src">
-Research report: handoff-skills-comparison-2026-11-10.md (agensi-research/data), with its Verification section.<br>
-softaworks session-handoff: <a href="https://github.com/softaworks/agent-toolkit/blob/main/dist/plugins/session-handoff/skills/session-handoff/SKILL.md">SKILL.md</a>, <a href="https://skills.sh/softaworks/agent-toolkit/session-handoff">skills.sh page (4.2K installs)</a><br>
-ostikwhy-blip handoff: <a href="https://github.com/ostikwhy-blip/claude-code-handoff-skill/blob/master/SKILL.md">SKILL.md</a><br>
-mattpocock handoff: <a href="https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md">SKILL.md (16 lines)</a>, <a href="https://skills.sh/mattpocock/skills/handoff">skills.sh page (1.1M installs)</a><br>
-Cline Memory Bank: <a href="https://github.com/cline/cline/blob/main/docs/best-practices/memory-bank.mdx">memory-bank.mdx</a><br>
-agensi Session Handoff: <a href="https://www.agensi.io/skills/session-handoff">listing</a> (not independently verified)
-</p>
-</main>
+<p>1) Created Nov 3 2026. Edited in 27 commits across 5 working days while 61 commits of product work landed. Now 399 lines in 15 sections, with older history in a linked archive.<br />
+2) Nov 10, morning audit: three "What is next" bullets still described work that had shipped on Nov 5. A fresh session could have rebuilt it. The audit also found the file said what the product was but not why it existed, which became the Goal and strategy section.<br />
+3) Nov 10, first run of the verification checks: two stale facts caught ("$21 a year today", a local model name that no longer matched the health output). The same run exposed a flaw in the skill's own unknowns check, which was fixed before release.<br />
+4) Nov 10, research: 19 similar skills found, 13 read in full and scored, five load-bearing claims re-fetched by a second session. Four verified word for word, one not independently reachable (a browser-rendered page).</p>
+<h3>Limits, stated plainly</h3>
+<blockquote>
+<p>The scoring criteria came from our own feature list, so the comparison is a completeness check, not a neutral benchmark. The concurrency guard only notices files changed in the last hour and asks the owner, there is no lock. Token figures are approximate. The agensi listing "Session Handoff" could not be read, its 15 sections and 7 uses come from the research agent's fetch alone. Real use is one project over one week.</p>
+</blockquote>
+<h3>Sources</h3>
+<ul>
+<li>Research report: handoff-skills-comparison-2026-11-10.md (agensi-research/data), with its Verification section.</li>
+<li>softaworks session-handoff: <a href="https://github.com/softaworks/agent-toolkit/blob/main/dist/plugins/session-handoff/skills/session-handoff/SKILL.md">SKILL.md</a>, <a href="https://skills.sh/softaworks/agent-toolkit/session-handoff">skills.sh page (4.2K installs)</a></li>
+<li>ostikwhy-blip handoff: <a href="https://github.com/ostikwhy-blip/claude-code-handoff-skill/blob/master/SKILL.md">SKILL.md</a></li>
+<li>mattpocock handoff: <a href="https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md">SKILL.md (16 lines)</a>, <a href="https://skills.sh/mattpocock/skills/handoff">skills.sh page (1.1M installs)</a></li>
+<li>Cline Memory Bank: <a href="https://github.com/cline/cline/blob/main/docs/best-practices/memory-bank.mdx">memory-bank.mdx</a></li>
+<li>agensi Session Handoff: <a href="https://www.agensi.io/skills/session-handoff">listing</a> (not independently verified)</li>
+</ul>
+<p><a href="https://github.com/aminafara123/handoff-upkeep">Source on GitHub</a></p>
 </body></html>

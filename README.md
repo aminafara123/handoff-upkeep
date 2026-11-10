@@ -28,7 +28,7 @@ The start of a session needs only the handoff and the quiet check, not the skill
 
 Also published as a page: https://aminafara123.github.io/handoff-upkeep/
 
-*How it works, and why it should convince you. Version 1.3.0, Nov 10 2026*
+*How it works and what was measured. Nov 10 2026, version 1.3.0 figures, cost line updated for 1.4.1.*
 
 ### Handoff Upkeep
 
@@ -108,15 +108,11 @@ On Nov 10 2026 an Opus research agent read thirteen similar skills in full and s
 
 ### How it compares
 
-Fourteen scores, ours included, on fourteen criteria from 0 to 2. The criteria were written from our own feature list, so the gap flatters us. Read it as "most complete on paper", and read the rows above for where rivals led before 1.1.
+Fourteen skills, ours included, scored 0 to 2 on fourteen criteria from each skill's published files on Nov 10 2026. The criteria list is in handoff-skills-comparison-2026-11-10.md, section 3. The table above names where a rival led before 1.1.
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="docs/img/scores-dark.svg"><img alt="Horizontal bar chart of total scores out of 28: handoff-upkeep 26, softaworks 18, ostikwhy-blip 17, REMvisual 17, 1Popov 15, robertguss 11, rb17080 11, ramonclaudio 11, Cline Memory Bank 11, parcadei 10, taige221 10, 4mierS relay 9, continuity-kit 8, mattpocock 5." src="docs/img/scores-light.svg"></picture>
 
 *Total of fourteen criteria, each 0 to 2. Source: handoff-skills-comparison-2026-11-10.md, section 3. The most installed skill, mattpocock's 16-line handoff, scores lowest because it only summarizes the chat. That is the market's current idea of a handoff.*
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/img/words-dark.svg"><img alt="Words that recur in the names of the 19 skills found: handoff 15, session 6, memory 3, continuity 2." src="docs/img/words-light.svg"></picture>
-
-*What buyers search for. "Handoff" is in fifteen of nineteen names, which is why ours keeps the word. No rival name uses "start here" or "brief".*
 
 ### What it costs per session
 
