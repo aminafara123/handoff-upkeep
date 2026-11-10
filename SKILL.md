@@ -11,7 +11,7 @@ description: |
   "update the handoff", "is the handoff up to date", "what does a new session need",
   "write a start-here file", "end of session", "wrap up", "make sure the next session is not lost".
 version: 1.3.0
-docs_url: https://claude.ai/artifact/RVWvmKjjiap2FvYyEZKz5W
+docs_url: https://aminafara123.github.io/handoff-upkeep/
 summary: One start-here file per project, kept true, so no AI session is ever lost or rebuilds what shipped.
 tags: [handoff, context, documentation, claude-code, agents, memory, onboarding, runbook]
 keywords: [handoff, HANDOFF.md, session context, start here, project memory, decisions log, runbook]
