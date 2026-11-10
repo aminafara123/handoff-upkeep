@@ -68,7 +68,7 @@ The skill is two short procedures and two scripts. Everything mechanical is a sc
 5) A "What is next" bullet whose words match a commit subject since the last update (maybe shipped).
 6) Any secret pattern (API keys, tokens, passwords, private keys). This one is a hard fail.
 7) Lines tagged `[?]` older than seven days (claims never verified).
-8) A file over 400 lines (warn) or 600 (fail), because a handoff nobody reads is no handoff.
+8) A file over 5,000 tokens (warn, past that size Claude Code drops it after compaction) or 12,000 (fail), because a handoff nobody reads is no handoff.
 9) More than six history entries, or an entry over five lines: older entries belong in the linked archive, details belong in git.
 10) Dense lines in fact sections: long asides in parentheses or filler words. One fact per line.
 
@@ -151,7 +151,7 @@ Characters divided by four, measured Nov 10 2026 on each skill's own files. Riva
 
 | Skill | Procedure file | What the next session reads | What each session writes |
 |---|---:|---|---|
-| handoff-upkeep (ours) | 1,100 | 7,770 for one 399-line file, target 350 lines, warn at 400, fail at 600 | about 450, 21 lines on average over 24 edits |
+| handoff-upkeep (ours) | 1,174 | 7,644 for one 210-line file (1.4.0, lines unwrapped), warn at 5,000 tokens, fail at 12,000 | about 450, 21 lines on average over 24 edits |
 | handoff, mattpocock | 235 | a chat summary in /tmp, size not stated | a whole summary each session |
 | handoff, ostikwhy-blip | 1,470 | about 2,700, target 250 lines, ceiling 400 | the whole file each session, about 2,700 |
 | session-handoff, softaworks | 1,580 | a per-session file, size not stated, plus script output | the whole file each session |
