@@ -7,6 +7,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 SPEC = [  # (heading prefix the check matches, heading and placeholder for --new)
     ("what this is", "What this is", "<product, customer, owner (role, time zone, skill), what is live, revenue>"),
@@ -50,15 +51,15 @@ Profiles: 'Profile: lite|standard|full[, no-tags][, no-archive]' under Last upda
  lite 5 sections, 7 checks. standard 10, adds history, density. full 15, adds unverified.
 One PASS, WARN or FAIL line per check, exit 1 on any FAIL. Checks:
  last-updated   FAIL: no 'Last updated YYYY-MM-DD', or older than the newest commit
- sections       FAIL: a section of the profile missing or out of order
+ sections       FAIL: a section of the profile missing or out of order (HANDOFF-REFERENCE.md beside it counts)
  relative-time  FAIL: yesterday, today, soon and the like outside procedure sections
  unknowns       FAIL: TODO, TBD or ??? without 'ask the owner'
  maybe-shipped  WARN: a What is next bullet shares 3 words with a commit since Last updated
  secrets        FAIL: key-like strings (values never printed)
  unverified     WARN: a [?] line older than 7 days (no-tags drops it)
  history        WARN (no-archive drops it): over 6 dated What is done entries, or an entry over 5 lines
- density        WARN: fact line over 110 chars with an aside over 40 chars, or filler words
- size           WARN over 400 lines, FAIL over 600, target under 350
+ density        WARN: fact line over 220 chars with an aside over 40 chars, or filler words
+ size           tokens as chars/4, main file only: WARN over 5,000 (Claude Code's re-read cap), FAIL over 12,000
 --quiet prints only WARN and FAIL lines, then one summary line.
 --new writes a skeleton with only that profile's sections, never over an existing file."""
 
@@ -135,8 +136,9 @@ def words(text):
     return {w for w in re.findall(r"[a-z0-9]{5,}", text.lower()) if w not in STOP}
 
 
-def check(text, newest_commit, subjects, today):
-    """Return a list of (status, name, summary, hits). subjects: git log subjects since Last updated."""
+def check(text, newest_commit, subjects, today, ref=""):
+    """Return a list of (status, name, summary, hits). subjects: git log subjects since Last updated.
+    ref: text of HANDOFF-REFERENCE.md beside the handoff, its sections count as present."""
     lines = text.splitlines()
     out = []
     pname, switches, problem = profile(text)
@@ -152,16 +154,20 @@ def check(text, newest_commit, subjects, today):
         out.append(("PASS", "last-updated", f"{updated}, newest commit {newest_commit}", []))
 
     heads = [line[3:].strip().lower() for line in lines if line.startswith("## ")]
-    pos, missing = 0, []
+    ref_heads = [line[3:].strip().lower() for line in ref.splitlines() if line.startswith("## ")]
+    pos, missing, from_ref = 0, [], 0
     want = [s for s in SECTIONS if s in PROFILES[pname]]
     for s in want:
         idx = next((j for j in range(pos, len(heads)) if heads[j].startswith(s)), None)
-        if idx is None:
-            missing.append(s)
-        else:
+        if idx is not None:
             pos = idx + 1
+        elif any(h.startswith(s) for h in ref_heads):
+            from_ref += 1
+        else:
+            missing.append(s)
     out.append(("FAIL" if missing or problem else "PASS", "sections", f"{len(want) - len(missing)} of {len(want)} "
-                f"{pname} sections in order" + (f", missing: {', '.join(missing)}" if missing else ""),
+                f"{pname} sections in order" + (f", {from_ref} from HANDOFF-REFERENCE.md" if from_ref else "") +
+                (f", missing: {', '.join(missing)}" if missing else ""),
                 [problem] * bool(problem) + [f"missing or out of order: {s}" for s in missing]))
 
     rel = [f"L{i}: {l.strip()}" for sec, i, l in sections(lines)
@@ -211,13 +217,16 @@ def check(text, newest_commit, subjects, today):
                  "pointer line, trim long entries to 5 lines, details live in git" if bad else ""), long))
 
     dense = [f"L{i}: {l.strip()[:70]}" for sec, i, l in sections(lines) if not sec.startswith(NOT_FACTS)
-             and (len(l) > 110 and ASIDE.search(l) or FILLER.search(l))]
+             and (len(l) > 220 and ASIDE.search(l) or FILLER.search(l))]
     out.append(("WARN" if dense else "PASS", "density", f"{len(dense)} dense lines in fact sections" +
                 (": one fact per line, cut the aside or make it its own line" if dense else ""), dense))
 
-    n = len(lines)
-    out.append(("FAIL" if n > 600 else "WARN" if n > 400 else "PASS", "size",
-                f"{n} lines (target 350, warn 400, fail 600)", []))
+    tok, n = len(text) // 4, len(lines)
+    out.append(("FAIL" if tok > 12000 else "WARN" if tok > 5000 else "PASS", "size",
+                f"{tok:,} tokens (chars/4), {n} lines" + (
+                    ": over Claude Code's 5,000-token cap, after compaction the file comes back as a path only. "
+                    "Move cold sections (Decisions, Gotchas, Agents, Words, Weak spots, Goal) to HANDOFF-REFERENCE.md "
+                    "next to it, one pointer line in the handoff" if tok > 5000 else ", cap 5,000"), []))
     skip = SKIP[pname] | {SWITCHES[s] for s in switches}
     return [r for r in out if r[1] not in skip]
 
@@ -286,8 +295,10 @@ def selftest():
     assert h["history"][0] == "WARN" and "7 dated" in h["history"][2], h["history"]
     h = {x[1]: x for x in check(FIXTURE.replace("button.\n", "button.\n" + "  more\n" * 5), None, [], today)}
     assert h["history"][0] == "WARN" and len(h["history"][3]) == 1, h["history"]
-    bad = check(FIXTURE.replace("## Key numbers\n", "") + "x\n" * 601, None, [], today)
+    bad = check(FIXTURE.replace("## Key numbers\n", "") + "x" * 50000 + "\n", None, [], today)
     assert [x[0] for x in bad if x[1] in ("sections", "size", "last-updated")] == ["WARN", "FAIL", "FAIL"]
+    warn = {x[1]: x for x in check(FIXTURE + "x" * 21000 + "\n", None, [], today)}
+    assert warn["size"][0] == "WARN" and "HANDOFF-REFERENCE.md" in warn["size"][2], warn["size"]
     clean = check("Last updated 2026-01-20\n" + "\n".join("## " + s for s in SECTIONS) +
                   "\npath /home/user/projects/SomeLongFolderName123/sub/x.py", dt.date(2026, 1, 20), [], today)
     assert all(x[0] == "PASS" for x in clean), clean
@@ -306,6 +317,16 @@ def selftest():
     assert len(nt) == 9 and not any("[?]" in h for x in nt for h in x[3]), nt
     na = {x[1]: x for x in check(FIXTURE.replace("01.\n", "01.\nProfile: huge, no-archive\n", 1), None, [], today)}
     assert na["sections"][0] == "FAIL" and "unknown profile" in na["sections"][3][0] and "history" not in na, na
+    with tempfile.TemporaryDirectory() as d:  # cold sections in a sibling file count, size is the main file only
+        hp = os.path.join(d, "HANDOFF.md")
+        open(hp, "w").write(skeleton("full", today).replace("## Key numbers", "## Prices"))
+        open(os.path.join(d, "HANDOFF-REFERENCE.md"), "w").write("## Key numbers\n" + "x" * 50000 + "\n")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            main([hp])
+        out = buf.getvalue()
+    assert "PASS sections: 15 of 15 full sections in order, 1 from HANDOFF-REFERENCE.md" in out, out
+    assert "PASS size" in out, out
     print("selftest ok")
 
 
@@ -327,10 +348,12 @@ def main(argv):
     path = argv[0]
     repo = argv[argv.index("--repo") + 1] if "--repo" in argv else os.path.dirname(os.path.abspath(path))
     text = open(path, encoding="utf-8").read()
+    ref_path = os.path.join(os.path.dirname(os.path.abspath(path)), "HANDOFF-REFERENCE.md")
+    ref = open(ref_path, encoding="utf-8").read() if os.path.exists(ref_path) else ""
     newest = git(repo, "log", "-1", "--format=%cs")
     m = re.search(r"Last updated\W*(\d{4}-\d\d-\d\d)", text)
     subjects = (git(repo, "log", f"--since={m.group(1)} 00:00", "--format=%s") or "").splitlines() if m else []
-    results = check(text, dt.date.fromisoformat(newest) if newest else None, subjects, dt.date.today())
+    results = check(text, dt.date.fromisoformat(newest) if newest else None, subjects, dt.date.today(), ref)
     pname, switches, _ = profile(text)
     return report(results, "--quiet" in argv, " ".join([pname] + switches))
 

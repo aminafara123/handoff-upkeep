@@ -30,20 +30,15 @@ How we win: match what the $20 to $99 trackers offer at the same price, and feel
 Paid ads are out, they break even only on the $99 plan.
 
 ## Map of the folder
-- `app.py`: the whole app (FastAPI + Jinja2 + SQLite, single file). `templates/` pages.
-  241 tests: `../../.venv/bin/python -m pytest -q` from this folder.
-- `scripts/`: `health.sh` checks the whole stack and prints PASS or FAIL lines.
-  `restart-app.sh` restarts only the app by port. `deploy-site.sh "msg"` builds and
-  deploys the site and confirms the new build is live.
+- `app.py`: the whole app (FastAPI + Jinja2 + SQLite, single file). `templates/` pages. 241 tests: `../../.venv/bin/python -m pytest -q` from this folder.
+- `scripts/`: `health.sh` checks the whole stack and prints PASS or FAIL lines. `restart-app.sh` restarts only the app by port. `deploy-site.sh "msg"` builds and deploys the site and confirms the new build is live.
 - `marketing/site/`: the static site. Edit `tools/pages/*.html` sources only.
 - `growth/`: `outreach.py` (cold email sender with hard caps and suppression).
 
 ## Secrets and accounts (locations only, never copy values into docs)
-- A private env file outside the repo, sourced by the start script: SMTP, payments,
-  outreach mailbox, webhook secret.
+- A private env file outside the repo, sourced by the start script: SMTP, payments, outreach mailbox, webhook secret.
 - Tunnel credentials in the cloudflared config folder.
-- Accounts: Cloudflare, Spaceship (registrar), GitHub Pages, Dodo Payments, Brevo,
-  Zoho Mail, G2, Search Console. The owner holds all logins.
+- Accounts: Cloudflare, Spaceship (registrar), GitHub Pages, Dodo Payments, Brevo, Zoho Mail, G2, Search Console. The owner holds all logins.
 
 ## Rules for working with the owner
 1) Copy-paste text: no em-dashes, no semicolons, numbered lists as "1) ".
@@ -52,22 +47,17 @@ Paid ads are out, they break even only on the $99 plan.
 4) Questions to the owner: few, concrete, with options to tick. He reads on his phone.
 
 ## First ten minutes of a session
-1) `git log --oneline -5` and `git status --short`. Uncommitted changes mean a session
-   is open right now or died mid-work: ask the owner before touching the same files.
+1) `git log --oneline -5` and `git status --short`. Uncommitted changes mean a session is open right now or died mid-work: ask the owner before touching the same files.
 2) `bash saas-lab/coipatrol/scripts/health.sh`. All PASS is normal.
 3) Read the last line of yesterday's and today's files in `runs/`. "exit 0" is clean.
 4) Read the owner's todo file. "For me" items are his, "Claude" items are yours.
 5) Do not re-plan. Work comes from the todo file, "What is next" and today's request.
 
 ## What is done (short history)
-- Oct 26: Dodo Payments approved (individual, no licence), billing verified with a test
-  card, flipped to live.
-- Nov 2: six-day tunnel outage found (cloudflared self-update), fixed with
-  --no-autoupdate plus a watchdog.
-- Nov 5: WSL shut its VM down when the last console closed, taking app and tunnel with
-  it. Replaced the Startup-folder launcher with a hidden scheduled task.
-- Nov 10: routines moved to per-routine tool allowlists. YEAR10 code at checkout.
-  Camera photos on all three certificate upload forms. 241 tests.
+- Oct 26: Dodo Payments approved (individual, no licence), billing verified with a test card, flipped to live.
+- Nov 2: six-day tunnel outage found (cloudflared self-update), fixed with --no-autoupdate plus a watchdog.
+- Nov 5: WSL shut its VM down when the last console closed, taking app and tunnel with it. Replaced the Startup-folder launcher with a hidden scheduled task.
+- Nov 10: routines moved to per-routine tool allowlists. YEAR10 code at checkout. Camera photos on all three certificate upload forms. 241 tests.
 
 ## What is next (dates matter)
 - Nov 11: first canary results. Read the outreach log in runs/ and check the inbox.
@@ -76,21 +66,17 @@ Paid ads are out, they break even only on the $99 plan.
 - First yearly customer with YEAR10: check the renewal a year later is full price.
 
 ## Known weak spots
-- The app runs on the owner's home PC. Reboots and WSL shutdown are handled by the
-  scheduled task, hardware failure is not. Move to a $5 VPS at the first paying customer.
+- The app runs on the owner's home PC. Reboots and WSL shutdown are handled by the scheduled task, hardware failure is not. Move to a $5 VPS at the first paying customer.
 - The demo is one shared account that resets on each click.
 - AI extraction runs inside the web request, a slow read blocks other requests briefly.
 
 ## Agents and routines
-- One-task agents in `.claude/agents/`, each with its model in the frontmatter (haiku
-  for ops, opus for the builder, sonnet for the rest).
-- Windows schedule through `scripts/run-routine.sh`: ops daily 08:30, outreach weekdays
-  17:30, competitor watch monthly. Logs land in `runs/`.
+- One-task agents in `.claude/agents/`, each with its model in the frontmatter (haiku for ops, opus for the builder, sonnet for the rest).
+- Windows schedule through `scripts/run-routine.sh`: ops daily 08:30, outreach weekdays 17:30, competitor watch monthly. Logs land in `runs/`.
 - Each routine runs in dontAsk mode with its own tool allowlist.
 
 ## Decisions and why (do not reopen without new evidence)
-- Dodo Payments, not Stripe or Paddle: every Stripe-based platform demands a UAE trade
-  licence, Dodo verified the owner as an individual. Fee about 5.3%, accepted.
+- Dodo Payments, not Stripe or Paddle: every Stripe-based platform demands a UAE trade licence, Dodo verified the owner as an individual. Fee about 5.3%, accepted.
 - Home PC through a Cloudflare tunnel, not a VPS: $0 until the first paying customer.
 - Reader on Claude Sonnet 5.5: on the 18-certificate eval Sonnet sent 0 to review.
 - Never chase TrackMyVendor ($39 unlimited) or SubDoc ($20) on price.
@@ -110,14 +96,12 @@ Paid ads are out, they break even only on the $99 plan.
 
 ## Renewals and expiries
 - coipatrol.com: Spaceship, bought Oct 16 2026, auto-renew OFF. Renew by Oct 2027.
-- Claude Code token for the routines: made Nov 6 2026, lasts about a year. Renew with
-  `claude-work setup-token` and replace the token file.
+- Claude Code token for the routines: made Nov 6 2026, lasts about a year. Renew with `claude-work setup-token` and replace the token file.
 - Zoho Mail Lite: paid yearly from Nov 2 2026, renews Nov 2027.
 
 ## Gotchas that cost time
 - The shell's working directory resets between tool calls. Absolute paths everywhere.
-- `pkill -f 'uvicorn app:app'` matches the tool's own shell and kills the session.
-  restart-app.sh kills by port.
+- `pkill -f 'uvicorn app:app'` matches the tool's own shell and kills the session. restart-app.sh kills by port.
 - A template change needs an app restart, the running process renders old templates.
 - GitHub scheduled workflows run a few times a day at best, whatever cron you write.
 

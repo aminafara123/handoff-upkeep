@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.0 (2026-11-10)
+
+Size counted in tokens, not lines, because that is what a session pays and what Claude Code caps.
+- Why: measured with a BPE tokenizer on 2026-11-10, every hard-wrapped line cost 2 tokens for the break and indent plus a line number in the Read view. The CoiPatrol handoff had 189 wrapped lines, about 10 percent of the file. Unwrapped with the same words it went from 399 to 210 lines and from 8,077 to 7,755 tokens.
+- Why: Claude Code's docs (code.claude.com/docs/en/context-window) say that after compaction up to five recently read files are re-read, and a file over 5,000 tokens comes back as a path without content. A start-here file over 5,000 tokens silently drops out of a long session.
+- Size check: tokens as chars/4, main file only. PASS under 5,000, WARN over 5,000 naming the cap and the cold sections to move, FAIL over 12,000. The line count stays in the message.
+- HANDOFF-REFERENCE.md beside the handoff: its sections count toward the profile, the sections summary says how many came from it.
+- Density check: long-line limit raised from 110 to 220 characters, so an unwrapped single bullet is not flagged for length alone. The filler test is unchanged.
+- Selftest: size PASS, WARN and FAIL by character count, and a temp-dir fixture with a sibling HANDOFF-REFERENCE.md.
+- SKILL.md: rule "one bullet, one line, never hard-wrap", and the 5,000-token target with HANDOFF-REFERENCE.md for cold sections.
+- SECTIONS.md: the size rule in tokens with the 5,000 cap. Template and example unwrapped, same words.
+- README: cost line with the 1.4.0 figures.
+
 ## 1.3.0 (2026-11-10)
 
 Three sizes, so a small project carries a small handoff.

@@ -2,7 +2,7 @@
 
 One start-here file per project, kept true by a script, so every new AI session begins with the goal, the decisions and their reasons, what shipped, what is next, the numbers, the renewals and the traps.
 
-handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills folders. It comes in three sizes, lite (5 sections), standard (10) and full (15), chosen by one line in the file. A check script refuses stale dates, shipped items still listed as next, secrets and unverified claims, and prints one line when the file is clean. An evidence script collects commits, git status and the last test run at the end of a session. Claim tags, a do-not-retry list and a degradation trigger keep the file honest between sessions. It was built on, and is used daily by, a live one-person SaaS, and this is version 1.3.0.
+handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills folders. It comes in three sizes, lite (5 sections), standard (10) and full (15), chosen by one line in the file. A check script refuses stale dates, shipped items still listed as next, secrets and unverified claims, and prints one line when the file is clean. An evidence script collects commits, git status and the last test run at the end of a session. Claim tags, a do-not-retry list and a degradation trigger keep the file honest between sessions. It was built on, and is used daily by, a live one-person SaaS, and this is version 1.4.0.
 
 ## Install
 
@@ -132,6 +132,8 @@ Context is the budget. The skill is designed so a session pays for one short ins
 | references/SECTIONS.md | only when creating a handoff from scratch | 1,110 |
 
 A full session therefore costs about 9,350 tokens of reading, under 5% of a 200,000-token context, and the handoff itself is 83% of that. Version 1.0 cost about 11,900: the procedure was 2,230 tokens and loaded twice, and the agent ran six greps and six git commands by hand. Version 1.1 moved the section definitions into a reference read only when creating a file, and replaced the hand commands with two scripts. Version 1.2 loads the skill once, at the end, prints only warnings, and adds the archive rule: the newest six history entries stay at five lines each, older ones move to a linked file. On the live handoff that rule alone cut the read from 8,700 to 7,750 tokens while keeping every number, name and date in the archive.
+
+1.4.0 (2026-11-10, chars/4): SKILL.md 4,697 chars, about 1,174 tokens. The CoiPatrol handoff unwrapped to 210 lines, 30,579 chars, about 7,650 tokens, still over Claude Code's 5,000-token re-read cap, so the check warns. Quiet check 1,046 chars, about 262 tokens (three warnings), evidence.sh about 294 as before.
 
 #### Three sizes, one line to choose
 

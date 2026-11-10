@@ -39,10 +39,8 @@ How the work is run: <who decides, who builds, what runs unattended, what counts
 
 ## First ten minutes of a session
 1) `python3 <skill path>/scripts/check_handoff.py HANDOFF.md --quiet`. One summary line is clean.
-2) Resolve any [?] lines it lists: run the command that proves each, then drop the tag or fix
-   the line. Fix any FAIL and any "maybe shipped" bullet that really shipped.
-3) `git log --oneline -5` and `git status --short`. Uncommitted changes you did not make mean
-   another session is open or died mid-work. Ask before touching the same files.
+2) Resolve any [?] lines it lists: run the command that proves each, then drop the tag or fix the line. Fix any FAIL and any "maybe shipped" bullet that really shipped.
+3) `git log --oneline -5` and `git status --short`. Uncommitted changes you did not make mean another session is open or died mid-work. Ask before touching the same files.
 4) <health or status command>. What normal looks like.
 5) <where run logs land and what a clean run says>.
 6) Read the owner's todo file. <Which items are theirs, which are yours.>

@@ -69,7 +69,7 @@ The handoff is read in full by every session, so every line costs tokens each ti
    section, not a bullet, naming the date range it holds.
 6) When trimming an entry to 5 lines, move the full text to HANDOFF-HISTORY.md first,
    so no number, name or date is lost.
-7) Target under 350 lines. check_handoff.py warns over 400 and fails over 600.
+7) Size is measured in tokens, about chars/4. Keep the handoff under 5,000 tokens, Claude Code's cap for re-reading a file after compaction. check_handoff.py warns over 5,000 and fails over 12,000. Cold sections can move to HANDOFF-REFERENCE.md beside it, one pointer line in the handoff. One bullet, one line, never hard-wrap.
 8) A section that outgrows its share moves detail to a linked file, with one pointer
    line on what that file answers.
 check_handoff.py warns on 1 to 5 (density, history) and on size. Rules, First ten
