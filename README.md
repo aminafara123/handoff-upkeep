@@ -11,6 +11,13 @@ handoff-upkeep is a skill for Claude Code and any agent that reads Agent Skills 
 3) Start a new file with `python3 scripts/check_handoff.py --new standard HANDOFF.md` (or `lite`, or `full`).
 4) Check a file with `python3 scripts/check_handoff.py HANDOFF.md --quiet`.
 
+Or install it as a Claude Code plugin, then invoke it as `/handoff-upkeep:handoff-upkeep`:
+
+```
+/plugin marketplace add aminafara123/handoff-upkeep
+/plugin install handoff-upkeep@handoff-upkeep
+```
+
 The start of a session needs only the handoff and the quiet check, not the skill. The scripts need only Python 3 and bash, no packages.
 
 ## Files
