@@ -1,0 +1,13 @@
+{
+  "name": "handoff-upkeep",
+  "version": "1.4.1",
+  "description": "One start-here file per project, kept true by a script, so every new AI session starts with full context. A Claude Code skill in three sizes.",
+  "author": {
+    "name": "aminafara123",
+    "url": "https://github.com/aminafara123"
+  },
+  "homepage": "https://aminafara123.github.io/handoff-upkeep/",
+  "repository": "https://github.com/aminafara123/handoff-upkeep",
+  "license": "MIT",
+  "keywords": ["handoff", "session", "context", "documentation", "skill"]
+}

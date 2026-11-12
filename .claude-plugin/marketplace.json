@@ -1,0 +1,16 @@
+{
+  "name": "handoff-upkeep",
+  "description": "Marketplace for the handoff-upkeep skill.",
+  "owner": {
+    "name": "aminafara123",
+    "url": "https://github.com/aminafara123"
+  },
+  "plugins": [
+    {
+      "name": "handoff-upkeep",
+      "source": "./",
+      "description": "One start-here file per project, kept true by a script, so every new AI session starts with full context.",
+      "category": "productivity"
+    }
+  ]
+}
